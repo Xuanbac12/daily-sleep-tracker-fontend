@@ -1,0 +1,33 @@
+.analysis-box {
+    background: #e8f0fe;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .analysis-box h3 {
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+  
+  .analysis-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
