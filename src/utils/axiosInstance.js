@@ -1,8 +1,9 @@
 import axios from "axios";
-const instance = axios.create({
-  baseURL: "http://13.113.107.66:8080",
-});
+console.log("🌐 Backend URL: ", process.env.REACT_APP_BACKEND_URL); // Kiểm tra xem giá trị thực sự là gì
 
+const instance = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL,
+});
 // ✅ Thêm token vào request header
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
