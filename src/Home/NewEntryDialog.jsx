@@ -104,7 +104,7 @@ const NewEntryDialog = ({
     };
   
     try {
-      const res = await axios.post("http://localhost:8080/api/sleep/add", payload);
+      const res = await axios.post("/sleep/add", payload);
     
       if (res.status === 200) {
         alert("Thêm bản ghi thành công!");

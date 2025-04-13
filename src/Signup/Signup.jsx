@@ -17,7 +17,7 @@ const Signup = () => {
     e.preventDefault();
     if (user.username && user.password) {
       try {
-        const res = await axios.post("/api/users/signup", user);
+        const res = await axios.post("/users/signup", user);
         alert("Đăng ký thành công!");
         navigate("/");
       } catch (err) {

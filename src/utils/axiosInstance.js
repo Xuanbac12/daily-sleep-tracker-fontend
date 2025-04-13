@@ -2,7 +2,7 @@ import axios from "axios";
 console.log("🌐 Backend URL: ", process.env.REACT_APP_BACKEND_URL); // Kiểm tra xem giá trị thực sự là gì
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL,
+  baseURL: "/api", // dùng proxy
 });
 // ✅ Thêm token vào request header
 instance.interceptors.request.use((config) => {

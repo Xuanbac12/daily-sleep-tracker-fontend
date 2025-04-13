@@ -17,7 +17,7 @@ const Signin = () => {
     if (user.username && user.password) {
       try {
         // Gửi yêu cầu đăng nhập
-        const res = await axios.post("/api/users/login", user);
+        const res = await axios.post("/users/login", user);
   
         const { token, userId, firstLogin } = res.data;
   

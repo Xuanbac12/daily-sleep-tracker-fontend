@@ -64,7 +64,7 @@ const thisWeekRecords = getCurrentWeekRecords(records);
 
   const fetchSleepRecords = async () => {
     try {
-      const res = await axios.get(`/api/sleep/user/${userId}`);
+      const res = await axios.get(`/sleep/user/${userId}`);
       setRecords(res.data);
     } catch (err) {
       console.error("Lỗi lấy bản ghi ngủ:", err);
