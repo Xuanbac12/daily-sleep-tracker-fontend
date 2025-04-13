@@ -1,7 +1,6 @@
 import axios from "axios";
-
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://13.113.107.66:8080",
 });
 
 // ✅ Thêm token vào request header
