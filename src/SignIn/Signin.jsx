@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../utils/axiosInstance"; // Đường dẫn đến axiosInstance của bạn
 import "./Signin.css";
 
 const Signin = () => {
@@ -17,7 +17,7 @@ const Signin = () => {
     if (user.username && user.password) {
       try {
         // Gửi yêu cầu đăng nhập
-        const res = await axios.post("http://localhost:8080/api/users/login", user);
+        const res = await axios.post("/api/users/login", user);
   
         const { token, userId, firstLogin } = res.data;
   

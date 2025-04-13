@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+
 import "./Signup.css";
+import axios from "../utils/axiosInstance";
 
 const Signup = () => {
   const [user, setUser] = useState({ username: "", password: "" });
@@ -16,7 +17,7 @@ const Signup = () => {
     e.preventDefault();
     if (user.username && user.password) {
       try {
-        const res = await axios.post("http://localhost:8080/api/users/signup", user);
+        const res = await axios.post("/api/users/signup", user);
         alert("Đăng ký thành công!");
         navigate("/");
       } catch (err) {
