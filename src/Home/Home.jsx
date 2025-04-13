@@ -137,12 +137,7 @@ const Home = () => {
             <SleepAnalysis records={thisWeekRecords} />
 
             {/* Biểu đồ thêm (tuần hiện tại) */}
-            <SleepChart
-              data={thisWeekRecords.map((item) => ({
-                date: item.date,
-                duration: parseFloat(item.duration),
-              }))}
-            />
+           
           </>
         )}
       </div>
