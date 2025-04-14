@@ -30,7 +30,7 @@ const Signin = () => {
         // ✅ Điều hướng
         navigate("/home");
   
-      } catch (err) {
+     } catch (err) {
         console.error("Đăng nhập thất bại:", err);
         alert("Tài khoản hoặc mật khẩu sai!");
       }
