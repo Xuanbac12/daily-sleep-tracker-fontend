@@ -77,7 +77,7 @@ npm start
 
 ## 📡 Kết nối backend
 
-Ứng dụng frontend này cần kết nối với backend (Spring Boot hoặc Node.js). Cập nhật địa chỉ trong file:
+Ứng dụng frontend này cần kết nối với backend (Spring Boot). Cập nhật địa chỉ trong file:
 
 ```js
 // src/utils/axiosInstance.js

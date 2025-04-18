@@ -1,24 +1,47 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #5795FA;
-    color: white;
-  }
-  
-  .logout-btn {
-    background-color: white;
-    color: #5795FA;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: 1rem;
-  }
-  
-  .logout-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #5795fa;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem; /* giúp các phần không dính vào nhau */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* tránh tràn nếu nội dung quá dài */
+  white-space: nowrap; /* ❗ giữ các phần tử trên 1 dòng */
+}
+
+.navbar-left h3 {
+  margin: 0;
+  font-weight: bold;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.logout-btn {
+  background-color: white;
+  color: #5795fa;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.logout-btn:hover {
+  background-color: #e0e0e0;
+}

@@ -13,17 +13,21 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-// ✅ Nếu nhận lỗi 401 (token hết hạn), thì logout
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    const url = error?.config?.url;
+    const isAuthEndpoint = url?.includes("/login") || url?.includes("/signup");
+
+    if (!isAuthEndpoint && error.response?.status === 401) {
       alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       localStorage.clear();
-      window.location.href = "/"; // Quay về trang login
+      window.location.href = "/";
     }
-    return Promise.reject(error);
+
+    return Promise.reject(error); // Vẫn ném về catch
   }
 );
+
 
 export default instance;

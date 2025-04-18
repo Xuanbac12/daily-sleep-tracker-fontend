@@ -1,22 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 
 * {
-  box-sizing: border-box;
   margin: 0;
-  font-family: "Inter", sans-serif;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
+  font-family: "Inter", sans-serif;
   background-color: #edf4fe;
+  overflow-x: hidden; /* ✅ thêm dòng này */
 }
+
 
 .main {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 80px; /* tránh bị navbar che */
-  min-height: 100vh;
   padding: 1rem;
+  padding-top: 100px; /* ✅ thay vì margin-top */
+  min-height: 100vh;
 }
 
 .container {
@@ -26,15 +28,13 @@ body {
   width: 100%;
   max-width: 1200px;
   border-radius: 40px;
-  padding: 2rem;
-  gap: 1rem;
-  text-align: center;
+  padding: 1.5rem;
+  gap: 2rem;
 }
 
 .title {
-  font-size: 1.8rem;
-  font-weight: bolder;
-  letter-spacing: 0.045em;
+  font-size: clamp(1.4rem, 3vw, 2rem);  font-weight: bolder;
+  text-align: center;
   color: black;
 }
 
@@ -47,23 +47,18 @@ body {
 .new-btn1 {
   border-radius: 50px;
   padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   font-weight: 500;
   font-size: 0.95rem;
   background-color: #5795fa;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 1px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* ✅ Bố cục dọc cho Chart, Bảng, Phân tích */
 .statistics {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   gap: 2rem;
   width: 100%;
   margin-top: 2rem;
@@ -71,127 +66,22 @@ body {
 
 .duration,
 .stats {
-  flex: 1 1 300px;
-  max-width: 500px;
-}
-
-.duration-title,
-.stats-title {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-.duration-graph {
-  position: relative;
-}
-
-.container-table {
-  margin-top: 0.5rem;
   width: 100%;
-  overflow-x: auto;
 }
 
-.main-table {
-  width: 100%;
-  font-size: 0.8rem;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 8px;
-  color: gray;
-}
-
-.main-table tbody td:not(:first-child) {
-  background-color: #e0e9f5;
-}
-
-.input-group {
-  position: relative;
-  margin-bottom: 10%;
-}
-
-.input {
-  width: 100%;
-  border: solid 1.5px #9e9e9e;
-  border-radius: 1rem;
-  background: none;
-  padding: 1rem;
-  font-size: 1rem;
-}
-
-.user-label {
-  position: absolute;
-  left: 15px;
-  pointer-events: none;
-  transform: translateY(1rem);
-  transition: 0.2s ease;
-}
-
-.input:focus,
-.input:valid {
-  outline: none;
-  border: 1.5px solid #1a73e8;
-}
-
-.input:focus ~ label,
-.input:valid ~ label {
-  transform: translateY(-50%) scale(0.8);
-  background-color: #fff;
-  padding: 0 0.2em;
-  color: #2196f3;
-}
-
-/* 🔵 Navbar */
-.navbar {
-  width: 100%;
-  background-color: #5795fa;
-  color: white;
+.sleep-analysis {
+  margin-top: 2rem;
   padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
+  border-radius: 16px;
+  background-color: #eaf2ff;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.logout-btn {
-  padding: 0.4rem 1rem;
-  background-color: white;
-  color: #5795fa;
-  border: none;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  background-color: #e3ecff;
-}
-
-.welcome-msg {
-  font-size: 1.1rem;
-}
-
-/* ✅ Responsive cho mobile */
+/* ✅ Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
-  }
-
-  .statistics {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .duration,
-  .stats {
-    width: 100%;
-    max-width: 100%;
   }
 
   .title {
@@ -203,12 +93,16 @@ td {
     padding: 8px 16px;
   }
 
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
+  .sleep-analysis {
+    font-size: 14px;
+    padding: 1rem;
   }
+  /* ✅ Thêm vào Home.css */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;  /* Cho phép cuộn ngang nếu bảng quá rộng */
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+}
 
-  .welcome-msg {
-    margin-bottom: 0.5rem;
-  }
 }

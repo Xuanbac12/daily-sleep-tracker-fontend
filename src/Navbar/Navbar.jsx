@@ -1,25 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import "./Navbar.css";
 
-
-  
- const Navbar = ({ username }) => {
-    console.log("📦 [Navbar.jsx] Username nhận được:", username);
-    
-
-  
-
+const Navbar = () => {
+  const {username, logout } = useContext(AuthContext);
+  console.log("👤 Username trong Navbar:", username); // ✅ Thêm dòng này để kiểm tra
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("firstLogin"); // nếu có
-    navigate("/");
+    logout();
+    navigate("/signin");
   };
-  
 
   return (
     <nav className="navbar">

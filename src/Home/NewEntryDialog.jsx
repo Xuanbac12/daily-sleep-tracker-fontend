@@ -1,194 +1,203 @@
 import React, { useState, useEffect } from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import {
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Button, IconButton, TextField
+} from "@mui/material";
+import { LocalizationProvider, DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import axios from "../utils/axiosInstance"; // cập nhật đúng đường dẫn
+import CloseIcon from "@mui/icons-material/Close";
+import axios from "../utils/axiosInstance";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import {Box} from "@mui/material";
 
-
-const NewEntryDialog = ({
-  open,
-  handleClose,
-  selectedDate,
-  handleDateChange,
-  selectedTime1,
-  handleTimeChange1,
-  selectedTime2,
-  handleTimeChange2,
-  existingDates = [] // ✅ Gán mặc định để tránh undefined
-}) => {
+const NewEntryDialog = ({ open, handleClose, existingDates = [] }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [sleepTime, setSleepTime] = useState(null);
+  const [wakeTime, setWakeTime] = useState(null);
   const [sleepDuration, setSleepDuration] = useState("");
   const [durationValue, setDurationValue] = useState(0);
-
-  const formatDateToISO = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toISOString().split("T")[0]; // Trả về dạng yyyy-MM-dd
-  };
-  
-
-  // ✅ Hàm tính thời gian ngủ (hiển thị + số thực)
-  const calculateSleepDuration = (sleep, wake) => {
-    if (!sleep || !wake) return { display: "", value: 0 };
-
-    const [sleepH, sleepM] = sleep.split(":").map(Number);
-    const [wakeH, wakeM] = wake.split(":").map(Number);
-
-    let sleepTime = sleepH * 60 + sleepM;
-    let wakeTime = wakeH * 60 + wakeM;
-
-    if (wakeTime <= sleepTime) {
-      wakeTime += 24 * 60;
-    }
-
-    const durationMins = wakeTime - sleepTime;
-    const hours = Math.floor(durationMins / 60);
-    const minutes = durationMins % 60;
-
-    return {
-      display: `${hours}h ${minutes}m`,
-      value: parseFloat((durationMins / 60).toFixed(2)), // ví dụ: 7.5 giờ
-    };
-  };
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ date: "", sleep: "", wake: "" });
 
   useEffect(() => {
-    if (selectedTime1 && selectedTime2) {
-      const result = calculateSleepDuration(selectedTime2, selectedTime1);
-      setSleepDuration(result.display);
-      setDurationValue(result.value);
+    if (selectedDate && sleepTime && wakeTime) {
+      const sleep = selectedDate.hour(sleepTime.hour()).minute(sleepTime.minute());
+      const wake = selectedDate.hour(wakeTime.hour()).minute(wakeTime.minute());
+      let diff = wake.diff(sleep, "minute");
+      if (diff < 0) diff += 24 * 60;
+      const hours = Math.floor(diff / 60);
+      const minutes = diff % 60;
+      setSleepDuration(`${hours}h ${minutes}m`);
+      setDurationValue((diff / 60).toFixed(2));
+    } else {
+      setSleepDuration("");
+      setDurationValue(0);
     }
-  }, [selectedTime1, selectedTime2]);
+  }, [selectedDate, sleepTime, wakeTime]);
 
   const handleReset = () => {
-    handleDateChange({ target: { value: "" } });
-    handleTimeChange1({ target: { value: "" } });
-    handleTimeChange2({ target: { value: "" } });
+    setSelectedDate(null);
+    setSleepTime(null);
+    setWakeTime(null);
     setSleepDuration("");
     setDurationValue(0);
+    setErrors({ date: "", sleep: "", wake: "" });
   };
 
   const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId");
-  
-    if (!userId || !selectedDate || !selectedTime1 || !selectedTime2) {
-      alert("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-  
-    const formattedDate = formatDateToISO(selectedDate);
-    const formattedExistingDates = existingDates.map(d => formatDateToISO(d));
-    // 🐞 THÊM CÁC LOG ĐỂ DEBUG
-  console.log("✅ selectedDate:", selectedDate);
-  console.log("✅ formattedDate:", formattedDate);
-  console.log("✅ existingDates (gốc):", existingDates);
-  console.log("✅ formattedExistingDates:", formattedExistingDates);
-  console.log("📌 Check includes:", formattedExistingDates.includes(formattedDate));
+    const newErrors = { date: "", sleep: "", wake: "" };
+    let hasError = false;
 
-    
-    if (formattedExistingDates.includes(formattedDate)) {
-      alert("Bạn đã có bản ghi cho ngày này rồi!");
+    if (!selectedDate) {
+      newErrors.date = "Vui lòng chọn ngày.";
+      hasError = true;
+    } else if (selectedDate.isAfter(dayjs(), 'day')) {
+      newErrors.date = "Không được chọn ngày trong tương lai.";
+      hasError = true;
+    }
+
+    if (!sleepTime) {
+      newErrors.sleep = "Vui lòng chọn giờ đi ngủ.";
+      hasError = true;
+    }
+
+    if (!wakeTime) {
+      newErrors.wake = "Vui lòng chọn giờ thức dậy.";
+      hasError = true;
+    }
+
+    const formattedDate = selectedDate?.format("YYYY-MM-DD");
+    if (existingDates.includes(formattedDate)) {
+      newErrors.date = "Bạn đã có bản ghi cho ngày này.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
       return;
     }
-    
-  
+
+    const maxSleepHours = 10; // Giới hạn hợp lý, có thể thay đổi
+
+if (parseFloat(durationValue) > maxSleepHours) {
+  toast.error(`Không thể ngủ liên tục hơn ${maxSleepHours} giờ.`);
+  return;
+}
+
+
+    const userId = localStorage.getItem("userId");
     const payload = {
       date: formattedDate,
-      sleepTime: selectedTime2,
-      wakeTime: selectedTime1,
+      sleepTime: sleepTime.format("HH:mm"),
+      wakeTime: wakeTime.format("HH:mm"),
       duration: durationValue,
       user: { id: userId },
     };
-  
+
     try {
+      setLoading(true);
       const res = await axios.post("/sleep/add", payload);
-    
       if (res.status === 200) {
-        alert("Thêm bản ghi thành công!");
+        toast.success("Thêm bản ghi thành công!");
+        handleReset();
         handleClose();
       } else {
-        alert("Gửi bản ghi thất bại. Mã phản hồi: " + res.status);
+        toast.error("Thêm thất bại.");
       }
     } catch (err) {
-      console.error("Lỗi khi gửi bản ghi:", err);
-      if (err.response) {
-        console.log("⚠️ Status:", err.response.status);
-        console.log("⚠️ Response body:", err.response.data);
-        alert("Lỗi từ server: " + JSON.stringify(err.response.data));
-      } else if (err.request) {
-        console.log("⚠️ Không nhận được phản hồi từ server:", err.request);
-        alert("Không thể kết nối đến server.");
-      } else {
-        alert("Lỗi không xác định: " + err.message);
-      }
+      toast.error(err.response?.data?.error || "Lỗi hệ thống.");
+    } finally {
+      setLoading(false);
     }
-  }
-  
+  };
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-      <DialogTitle>
-        <strong>Thêm bản ghi mới</strong>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{ position: "absolute", right: 8, top: 8, color: "gray" }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+    <Dialog open={open} onClose={() => { handleClose(); handleReset(); }} maxWidth="xs" fullWidth>
+      <DialogTitle sx={{ p: 0 }}>
+  <Box
+    sx={{
+      textAlign: "center",
+      py: 2,
+      fontSize: "1.25rem", // Tăng cỡ chữ
+      fontWeight: "bold",  // In đậm
+      fontFamily: "Roboto, sans-serif", // Chọn font đẹp hơn
+      letterSpacing: "0.5px", // Giãn chữ nhẹ
+      color: "#333" // Màu đậm hơn
+    }}
+  >
+    Thêm bản ghi mới
+  </Box>
+
+  <IconButton
+    onClick={() => { handleClose(); handleReset(); }}
+    sx={{ position: "absolute", right: 8, top: 8 }}
+  >
+    <CloseIcon />
+  </IconButton>
+</DialogTitle>
+
+
 
       <DialogContent dividers>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div className="input-group">
-            <label>Ngày</label>
-            <input
-              type="date"
-              className="input"
+          <div style={{ marginBottom: 16 }}>
+           <DatePicker
+              label="Ngày"
               value={selectedDate}
-              onChange={handleDateChange}
+              onChange={setSelectedDate}
+              disableFuture
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.date,
+                  helperText: errors.date,
+                },
+              }}
             />
           </div>
 
-          <div className="input-group">
-            <label>Giờ đi ngủ</label>
-            <input
-              type="time"
-              className="input"
-              value={selectedTime2}
-              onChange={handleTimeChange2}
+          <div style={{ marginBottom: 16 }}>
+            <TimePicker
+              label="Giờ đi ngủ"
+              value={sleepTime}
+              onChange={setSleepTime}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.sleep,
+                  helperText: errors.sleep,
+                },
+              }}
             />
           </div>
 
-          <div className="input-group">
-            <label>Giờ thức dậy</label>
-            <input
-              type="time"
-              className="input"
-              value={selectedTime1}
-              onChange={handleTimeChange1}
+          <div style={{ marginBottom: 16 }}>
+            <TimePicker
+              label="Giờ thức dậy"
+              value={wakeTime}
+              onChange={setWakeTime}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!errors.wake,
+                  helperText: errors.wake,
+                },
+              }}
             />
           </div>
 
           {sleepDuration && (
-            <div style={{ marginTop: "10px", fontWeight: "bold" }}>
-              💤 Tổng thời gian ngủ: {sleepDuration}
-            </div>
+            <p><strong>📅 Tổng thời gian ngủ: {sleepDuration}</strong></p>
           )}
         </LocalizationProvider>
       </DialogContent>
 
-      <DialogActions sx={{ justifyContent: "space-between", padding: "10px 24px" }}>
-        <Button variant="outlined" color="secondary" onClick={handleReset}>
-          Đặt lại
-        </Button>
-        <Button variant="text" onClick={handleClose}>
-          Hủy
-        </Button>
-        <Button variant="contained" onClick={handleSubmit}>
-          Gửi
+      <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
+        <Button onClick={handleReset} color="secondary" variant="contained">Đặt lại</Button>
+        <Button onClick={() => { handleClose(); handleReset(); }} color="error" variant="contained">Hủy</Button>
+        <Button onClick={handleSubmit} variant="contained" disabled={loading}>
+          {loading ? "Đang gửi..." : "Gửi"}
         </Button>
       </DialogActions>
     </Dialog>

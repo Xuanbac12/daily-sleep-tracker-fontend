@@ -9,6 +9,10 @@ import Navbar from "../Navbar/Navbar";
 import SleepAnalysis from "../SleepAnalysis/SleepAnalysis";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
+import dayjs from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek"; // Thêm plugin hỗ trợ tuần ISO (Thứ 2 → CN)
+dayjs.extend(isoWeek);
+
 
 const Home = () => {
   const [open, setOpen] = useState(false);
@@ -33,18 +37,17 @@ const Home = () => {
 
   // 📅 Lọc theo tuần hiện tại (Thứ 2 - Chủ nhật)
   const getCurrentWeekRecords = (records) => {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 = Chủ nhật
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-
+    const today = dayjs();
+  
+    const startOfWeek = today.startOf("isoWeek"); // ✅ Thứ 2 tuần này
+    const endOfWeek = today.endOf("isoWeek");     // ✅ Chủ nhật tuần này
+  
     return records.filter((r) => {
-      const d = new Date(r.date);
-      return d >= startOfWeek && d <= endOfWeek;
+      const recordDate = dayjs(r.date);
+      return recordDate.isAfter(startOfWeek.subtract(1, 'day')) && recordDate.isBefore(endOfWeek.add(1, 'day'));
     });
   };
+  
 
   const thisWeekRecords = getCurrentWeekRecords(records);
 
@@ -123,15 +126,16 @@ const Home = () => {
         ) : (
           <>
             <div className="statistics">
-              <div className="duration">
-                <p className="sleep-title">Sleep Duration (Last 7 Days)</p>
-                <SleepChart data={chartData} />
+            <div className="stats">
+            <SleepTable records={thisWeekRecords} setRecords={setRecords} />
+
               </div>
 
-              <div className="stats">
-                <p className="sleep-title">Sleep Stats</p>
-                <SleepTable records={last7DaysRecords} />
+              <div className="duration">
+                <p className="sleep-title">Sleep Duration</p>
+                <SleepChart data={thisWeekRecords} />
               </div>
+
             </div>
 
             <SleepAnalysis records={thisWeekRecords} />

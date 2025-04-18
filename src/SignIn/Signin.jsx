@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "../utils/axiosInstance"; // Đường dẫn đến axiosInstance của bạn
 import "./Signin.css";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 
 const Signin = () => {
   const [user, setUser] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,16 +24,13 @@ const Signin = () => {
         // Gửi yêu cầu đăng nhập
         const res = await axios.post("/users/login", user);
   
-        const { token, userId, firstLogin } = res.data;
-  
-        // ✅ Lưu thông tin vào localStorage
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("username", user.username);
-        localStorage.setItem("firstLogin", firstLogin);
-  
-        // ✅ Điều hướng
-        navigate("/home");
+        const { token, username, userId, firstLogin } = res.data;
+        console.log("📦 Login response:", res.data);
+
+        // ✅ Gọi context login để lưu vào state + localStorage
+        login({ token, username, userId, firstLogin });
+        toast.success("Đăng nhập thành công!");
+        navigate("/");
   
      } catch (err) {
         console.error("Đăng nhập thất bại:", err);

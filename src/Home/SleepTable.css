@@ -1,0 +1,97 @@
+.sleep-table-container {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f9fcff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  width: 100%; /* ✅ Giãn đầy đủ theo layout cha */
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #1e2b4e;
+  text-align: center;
+}
+
+.total-sleep {
+  font-size: 15px;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #3a4a6b;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* ✅ Bảng chia đều cột, co giãn đúng, không tràn, không xuống dòng */
+.styled-table {
+  width: 100%;
+  table-layout: auto;     /* ✅ Tự chia đều chiều rộng các cột */
+  border-collapse: collapse;
+}
+
+.styled-table th,
+.styled-table td {
+  white-space: nowrap; /* ✅ không xuống dòng */
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+/* Header đẹp hơn */
+.styled-table th {
+  background-color: #e3f2fd;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+/* Nút thao tác */
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  margin: 0 4px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+/* ✅ Responsive: vẫn chia đều và gọn trên mobile */
+@media (max-width: 768px) {
+  .styled-table th,
+.styled-table td {
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  font-size: clamp(12px, 2.5vw, 14px);  /* ✅ co giãn theo viewport */
+  while-space: nowrap; /* ✅ không xuống dòng */
+}
+
+
+  .edit-btn,
+  .delete-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+}
