@@ -33,7 +33,7 @@ const Signup = () => {
       case "username":
         if(!value) return "Vui lòng nhập tên đăng nhập.";
         if(!usernameRegex.test(value))
-          return "Tên đăng nhập phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
+          return "Tên đăng ký phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
         return ""; // Không có lỗi
       case "password":
         if(!value) return "Vui lòng nhập mật khẩu.";
