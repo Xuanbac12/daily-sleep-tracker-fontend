@@ -18,7 +18,7 @@ const Signup = () => {
   
   // ✅ Regex kiểm tra username và password
   const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
   const isValidUsername = (username) => usernameRegex.test(username);
   const isStrongPassword = (password) => passwordRegex.test(password);
