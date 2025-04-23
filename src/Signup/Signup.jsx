@@ -23,46 +23,55 @@ const Signup = () => {
   const isValidUsername = (username) => usernameRegex.test(username);
   const isStrongPassword = (password) => passwordRegex.test(password);
 
+  //Hàm kiểm tra lỗi 1 field
+  const validateField = (name, value) =>{
+    switch (name) {
+      case "username":
+        if(!value) return "Vui lòng nhập tên đăng nhập.";
+        if(!usernameRegex.test(value))
+          return "Tên đăng nhập phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
+        return ""; // Không có lỗi
+      case "password":
+        if(!value) return "Vui lòng nhập mật khẩu.";
+        if(!passwordRegex.test(value))
+          return "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt.";
+        return ""; // Không có lỗi
+        default:
+          return ""; // Không có lỗi
+    }
+  };
+
+  //Khi người dùng nhập -> kiểm tra lỗi ngay realtime
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+    
+    const updatedUser = { ...user, [name]: value }; // ✅ đảm bảo lấy đúng dữ liệu mới
+  setUser(updatedUser);
+
+  
+    const errorMessage = validateField(name, value); //Kiểm tra lỗi
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: errorMessage })); //Cập nhật lỗi
   };
 
+  //khi người dùng submit form(Đăng ký)
   const handleSubmit = async (e) => {
     e.preventDefault(); //Không cho reload trang
    
-    let hasError = false; //Biến kiểm tra có lỗi hay không
-    
+    const usernameError = validateField("username", user.username);
+    const passwordError = validateField("password", user.password);
+
     const newErrors = { //Reset lỗi khi submit
-      username: "",
-      password: "",
+      username: usernameError,
+      password: passwordError,
     };
 
-    
-      // Kiểm tra trống
-  if (!user.username) {
-    newErrors.username = "Vui lòng nhập tên đăng nhập.";
-    hasError = true;
-  } else if (!isValidUsername(user.username)) {
-    newErrors.username = "Tên đăng nhập phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
-    hasError = true;
-  }
+    setErrors(newErrors); //Cập nhật lỗi
 
-  if (!user.password) {
-    newErrors.password = "Vui lòng nhập mật khẩu.";
-    hasError = true;
-  } else if (!isStrongPassword(user.password)) {
-    newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt.";
-    hasError = true;
-  }
-
-  if (hasError) {
-    setErrors(newErrors);
-    return;
-  }
-
-       // Xóa lỗi cũ nếu không còn lỗi
-  setErrors({ username: "", password: "" });
+    if (usernameError || passwordError) {
+      return; // Nếu có lỗi thì không gửi yêu cầu
+    }
+  
     
     setLoading(true); //Bắt đầu loading
     try {
