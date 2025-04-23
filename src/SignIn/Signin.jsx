@@ -4,43 +4,65 @@ import axios from "../utils/axiosInstance"; // Đường dẫn đến axiosInsta
 import "./Signin.css";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const Signin = () => {
   const [user, setUser] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
     const { login } = useContext(AuthContext);
+
+      // Regex
+  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case "username":
+        if (!value) return "Vui lòng nhập tên đăng nhập.";
+        if (!usernameRegex.test(value))
+          return "Tên đăng nhập phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
+        return "";
+      case "password":
+        if (!value) return "Vui lòng nhập mật khẩu.";
+        if (!passwordRegex.test(value))
+          return "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, thường, số và ký tự đặc biệt.";
+        return "";
+      default:
+        return "";
+    }
+  };
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+    const errorMsg = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (user.username && user.password) {
-      try {
-        // Gửi yêu cầu đăng nhập
-        const res = await axios.post("/users/login", user);
-  
-        const { token, username, userId, firstLogin } = res.data;
-        console.log("📦 Login response:", res.data);
+    const usernameErr = validateField("username", user.username);
+    const passwordErr = validateField("password", user.password);
+    setErrors({ username: usernameErr, password: passwordErr });
 
-        // ✅ Gọi context login để lưu vào state + localStorage
-        login({ token, username, userId, firstLogin });
-        toast.success("Đăng nhập thành công!");
-        navigate("/");
-  
-     } catch (err) {
-        console.error("Đăng nhập thất bại:", err);
-        alert("Tài khoản hoặc mật khẩu sai!");
-      }
-    } else {
-      alert("Vui lòng nhập đầy đủ thông tin.");
+    if (usernameErr || passwordErr) return;
+
+    try {
+      const res = await axios.post("/users/login", user);
+      const { token, username, userId, firstLogin } = res.data;
+      login({ token, username, userId, firstLogin });
+      toast.success("Đăng nhập thành công!");
+      navigate("/");
+    } catch (err) {
+      console.error("Đăng nhập thất bại:", err);
+      toast.error("Tài khoản hoặc mật khẩu sai!");
     }
   };
-  
 
   return (
     <main className="signin-main">
@@ -53,16 +75,26 @@ const Signin = () => {
             placeholder="Tên đăng nhập"
             value={user.username}
             onChange={handleChange}
-            required
           />
-          <input
-            type="password"
-            name="password"
-            placeholder="Mật khẩu"
-            value={user.password}
-            onChange={handleChange}
-            required
-          />
+            {errors.username && <p className="input-error">{errors.username}</p>}
+            <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Mật khẩu"
+              value={user.password}
+              onChange={handleChange}
+              className="password-input"
+            />
+            <span
+              className="toggle-password-icon"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+          {errors.password && <p className="input-error">{errors.password}</p>}
+
           <button type="submit">Đăng nhập</button>
         </form>
 

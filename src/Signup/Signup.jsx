@@ -48,7 +48,6 @@ const Signup = () => {
   //Khi người dùng nhập -> kiểm tra lỗi ngay realtime
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
     
     const updatedUser = { ...user, [name]: value }; // ✅ đảm bảo lấy đúng dữ liệu mới
   setUser(updatedUser);
@@ -116,7 +115,8 @@ const Signup = () => {
             name="username"
             placeholder="Tên đăng ký"
             value={user.username}
-            onChange={handleChange}           
+            onChange={handleChange}     
+                  
           />
           {/* ✅ Hiển thị lỗi dưới ô username */}
   {errors.username && <p className="input-error">{errors.username}</p>}
@@ -131,14 +131,12 @@ const Signup = () => {
     onChange={handleChange}
     className="password-input"
   />
-  <button
-    type="button"
+  <span
     className="toggle-password-icon"
     onClick={() => setShowPassword((prev) => !prev)}
-    tabIndex={-1}
   >
     {showPassword ? <FaEyeSlash /> : <FaEye />}
-  </button>
+  </span>
 </div>
           {errors.password && <p className="input-error">{errors.password}</p>}
   <button type="submit" disabled={loading}>

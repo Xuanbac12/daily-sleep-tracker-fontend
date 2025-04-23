@@ -1,3 +1,4 @@
+/* === BỐ CỤC CHUNG === */
 .signup-main {
   display: flex;
   justify-content: center;
@@ -6,11 +7,12 @@
   background-color: #e8f0fe;
 }
 
+/* === KHUNG FORM === */
 .form-container {
   padding: 2rem;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 350px;
 }
 
@@ -19,16 +21,19 @@
   margin-bottom: 1.5rem;
 }
 
-.form input {
+/* === INPUT THƯỜNG (trừ password) === */
+.form input:not(.password-input) {
   display: block;
   width: 100%;
   margin-bottom: 1rem;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-.form button {
+/* === NÚT ĐĂNG KÝ DUY NHẤT (tránh ảnh hưởng nút icon) === */
+.form > button {
   width: 100%;
   padding: 10px;
   background-color: #5795FA;
@@ -39,37 +44,55 @@
   cursor: pointer;
 }
 
-.form button:hover {
+.form > button:hover {
   background-color: #417fe0;
 }
 
+/* === THÔNG BÁO LỖI === */
 .input-error {
   color: red;
   font-size: 0.9rem;
   margin-top: 4px;
   margin-bottom: 8px;
 }
+
+/* === Ô INPUT MẬT KHẨU + ICON 👁 === */
 .password-wrapper {
   position: relative;
   width: 100%;
+  margin-bottom: 1rem;
 }
 
 .password-input {
   width: 100%;
-  padding: 10px 40px 10px 12px; /* Chừa khoảng phải cho icon */
+  padding: 10px 40px 10px 12px; /* chừa chỗ bên phải cho icon */
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 
+/* === ICON MẮT 👁 ẨN/HIỆN === */
 .toggle-password-icon {
   position: absolute;
   top: 50%;
   right: 12px;
   transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #555;
   font-size: 18px;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-select: none; /* ✅ Safari iOS, macOS */
+}
+
+.toggle-password-icon:hover {
+  color: #222;
+  opacity: 0.9;
 }
