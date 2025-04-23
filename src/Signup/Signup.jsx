@@ -9,6 +9,8 @@ const Signup = () => {
   const [user, setUser] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); //Loading state
+  const [showPassword, setShowPassword] = useState(false); // 👁
+
 
   const [errors, setErrors] = useState({
     username: "",
@@ -116,15 +118,25 @@ const Signup = () => {
           />
           {/* ✅ Hiển thị lỗi dưới ô username */}
   {errors.username && <p className="input-error">{errors.username}</p>}
-          <input
-            type="password"
-            name="password"
-            placeholder="Mật khẩu"
-            value={user.password}
-            onChange={handleChange}
-          />
-          {/* ✅ Hiển thị lỗi dưới ô password */}
-  {errors.password && <p className="input-error">{errors.password}</p>}
+  
+           {/* 👁 Mật khẩu có toggle */}
+           <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Mật khẩu"
+              value={user.password}
+              onChange={handleChange}
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? "🙈" : "👁"}
+            </button>
+          </div>
+          {errors.password && <p className="input-error">{errors.password}</p>}
   <button type="submit" disabled={loading}>
     {loading ? "Đang xử lý..." : "Đăng ký"}
   </button>
