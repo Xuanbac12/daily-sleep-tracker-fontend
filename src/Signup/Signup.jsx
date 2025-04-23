@@ -76,7 +76,7 @@ const Signup = () => {
       
       } catch (err){
         if (err.response?.status === 409) {
-          toast.error("Tên đăng nhập đã tồn tại!");
+          toast.error("Tên đăng ký đã tồn tại!");
         } else if (err.response?.status === 400) {
           toast.warn(err.response.data); // Thông báo từ backend (ví dụ: sai định dạng)
         } else if (err.response?.status === 500) {
@@ -101,7 +101,7 @@ const Signup = () => {
           <input
             type="text"
             name="username"
-            placeholder="Tên đăng nhập"
+            placeholder="Tên đăng ký"
             value={user.username}
             onChange={handleChange}           
           />
