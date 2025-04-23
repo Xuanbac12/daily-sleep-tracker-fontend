@@ -51,20 +51,25 @@
 }
 .password-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
+  width: 100%;
 }
 
-.password-wrapper input {
-  flex: 1;
-  padding-right: 40px;
+.password-input {
+  width: 100%;
+  padding: 10px 40px 10px 12px; /* Chừa khoảng phải cho icon */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-.toggle-password-btn {
+.toggle-password-icon {
   position: absolute;
-  right: 10px;
-  background: none;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: transparent;
   border: none;
   cursor: pointer;
+  color: #555;
   font-size: 18px;
 }

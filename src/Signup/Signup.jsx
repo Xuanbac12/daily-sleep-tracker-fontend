@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // nếu dùng react-icons
+
 
 import "./Signup.css";
 import axios from "../utils/axiosInstance";
@@ -118,24 +120,26 @@ const Signup = () => {
           />
           {/* ✅ Hiển thị lỗi dưới ô username */}
   {errors.username && <p className="input-error">{errors.username}</p>}
-  
+
            {/* 👁 Mật khẩu có toggle */}
            <div className="password-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Mật khẩu"
-              value={user.password}
-              onChange={handleChange}
-            />
-            <button
-              type="button"
-              className="toggle-password-btn"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? "🙈" : "👁"}
-            </button>
-          </div>
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Mật khẩu"
+    value={user.password}
+    onChange={handleChange}
+    className="password-input"
+  />
+  <button
+    type="button"
+    className="toggle-password-icon"
+    onClick={() => setShowPassword((prev) => !prev)}
+    tabIndex={-1}
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </button>
+</div>
           {errors.password && <p className="input-error">{errors.password}</p>}
   <button type="submit" disabled={loading}>
     {loading ? "Đang xử lý..." : "Đăng ký"}
