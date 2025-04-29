@@ -22,7 +22,7 @@ const Signup = () => {
   
   
   // ✅ Regex kiểm tra username và password
-  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const usernameRegex = /^[a-zA-Z0-9_]{2,20}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
   const isValidUsername = (username) => usernameRegex.test(username);
@@ -34,7 +34,7 @@ const Signup = () => {
       case "username":
         if(!value) return "Vui lòng nhập tên đăng nhập.";
         if(!usernameRegex.test(value))
-          return "Tên đăng ký phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
+          return "Tên đăng ký phải từ 2–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
         return ""; // Không có lỗi
       case "password":
         if(!value) return "Vui lòng nhập mật khẩu.";
@@ -83,7 +83,7 @@ const Signup = () => {
       
             // ✅ Đăng ký thành công → toast & chuyển trang khi toast đóng
             toast.success("Đăng ký thành công!", {
-              autoClose: 2000,
+              autoClose: 4000,
               onClose: () => navigate("/signin"),
             });
       

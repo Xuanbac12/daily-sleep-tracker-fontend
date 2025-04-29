@@ -18,7 +18,7 @@ const Signin = () => {
     const { login } = useContext(AuthContext);
 
       // Regex
-  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const usernameRegex = /^[a-zA-Z0-9_]{2,20}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
   const validateField = (name, value) => {
@@ -26,7 +26,7 @@ const Signin = () => {
       case "username":
         if (!value) return "Vui lòng nhập tên đăng nhập.";
         if (!usernameRegex.test(value))
-          return "Tên đăng nhập phải từ 4–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
+          return "Tên đăng nhập phải từ 2–20 ký tự, chỉ gồm chữ, số, dấu gạch dưới.";
         return "";
       case "password":
         if (!value) return "Vui lòng nhập mật khẩu.";

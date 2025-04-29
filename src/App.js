@@ -27,7 +27,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <ToastContainer position="top-center" autoClose={3000} />
+        <ToastContainer position="top-center" autoClose={6000} />
         <AppRoutes />
       </Router>
     </AuthProvider>
