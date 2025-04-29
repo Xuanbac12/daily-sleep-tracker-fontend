@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"; // nếu dùng react-icons
 import "./Signup.css";
 import axios from "../utils/axiosInstance";
 import { toast } from "react-toastify";
+import "@fontsource/roboto";
 
 const Signup = () => {
   const [user, setUser] = useState({ username: "", password: "" });

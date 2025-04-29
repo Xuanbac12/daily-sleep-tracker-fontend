@@ -1,94 +1,119 @@
+/* ======== SIGNIN.CSS ======== */
+
+/* Khung nền chính */
 .signin-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f4ff;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4ff;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Container form */
+.form-container {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 350px;
+}
+
+/* Tiêu đề */
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+/* Form chung */
+.form input:not(.password-input),
+.password-input {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+/* Style cho placeholder */
+.form input::placeholder,
+.password-input::placeholder {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: #aaa;
+  opacity: 1;
+}
+
+/* Button đăng nhập */
+.form > button {
+  width: 100%;
+  padding: 10px;
+  background-color: #5795FA;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover button */
+.form button:hover {
+  background-color: #417fe0;
+}
+
+/* Thông báo lỗi */
+.input-error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+/* Wrapper ô nhập mật khẩu + icon */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Input mật khẩu (bổ sung icon bên phải) */
+.password-input {
+  padding: 10px 40px 10px 12px; /* Chừa khoảng bên phải cho icon 👁 */
+}
+
+/* Icon ẩn/hiện mật khẩu 👁 */
+.toggle-password-icon {
+  all: unset;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+  background-color: transparent;
+  user-select: none;
+  -webkit-user-select: none; /* 🔥 Thêm dòng này để hỗ trợ Safari iOS */
+
+}
+
+.toggle-password-icon:hover {
+  color: #222;
+  opacity: 0.9;
+}
+
+/* ======== Responsive Mobile ======== */
+@media (max-width: 480px) {
   .form-container {
-    padding: 2rem;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 350px;
+    width: 90%;
+    padding: 1.5rem;
   }
-  
-  .form-container h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form input:not(.password-input) {
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  
-  .form > button {
-
-    width: 100%;
-    padding: 10px;
-    background-color: #5795FA;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .form button:hover {
-    background-color: #417fe0;
-  }
-
-  .input-error {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 4px;
-    margin-bottom: 8px;
-  }
-  
-  /* Password input + eye icon 👁 */
-  .password-wrapper {
-    position: relative;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  .password-input {
-    width: 100%;
-    padding: 10px 40px 10px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  .toggle-password-icon {
-    all: unset;
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #555;
-    cursor: pointer;
-    line-height: 1;
-    background-color: transparent;
-    padding: 0;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-  
-  .toggle-password-icon:hover {
-    color: #222;
-    opacity: 0.9;
-  }
-  
+}

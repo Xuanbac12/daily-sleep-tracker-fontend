@@ -6,6 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import "@fontsource/roboto"; // tự động áp dụng
+
 
 const Signin = () => {
   const [user, setUser] = useState({ username: "", password: "" });
