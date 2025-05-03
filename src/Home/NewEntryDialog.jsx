@@ -10,6 +10,8 @@ import axios from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import {Box} from "@mui/material";
+import 'dayjs/locale/vi'; // thêm dòng này vào đầu file
+dayjs.locale('vi');
 
 const NewEntryDialog = ({ open, handleClose, existingDates = [] }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -140,7 +142,10 @@ if (parseFloat(durationValue) > maxSleepHours) {
 
 
       <DialogContent dividers>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider 
+        dateAdapter={AdapterDayjs}
+        adapterLocale="vi" // Đặt ngôn ngữ tiếng Việt cho DatePicker
+        >
           <div style={{ marginBottom: 16 }}>
            <DatePicker
               label="Ngày"
