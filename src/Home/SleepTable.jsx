@@ -94,7 +94,7 @@ const SleepTable = ({ records, setRecords }) => {
   .map((record) => (
 
             <tr key={record.id}>
-              <td>{record.date}</td>
+              <td>{dayjs(record.date).format("DD/MM/YYYY")}</td> {/* 👉 Định dạng ngày */}
               <td>{record.sleepTime}</td>
               <td>{record.wakeTime}</td>
               <td>{record.duration} giờ</td>
