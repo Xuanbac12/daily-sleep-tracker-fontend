@@ -84,35 +84,25 @@ useEffect(() => {
       newErrors.date = "Bạn đã có bản ghi cho ngày này.";
       hasError = true;
     }
-    const sleepHours = parseFloat(durationValue);
-const minSleepHours = 1;
-const warningSleepHours = 4;
-const maxSleepHours = 10;
-
-// ❌ Chặn nếu ngủ dưới 1 giờ
-if (sleepHours < minSleepHours) {
-  newErrors.sleep = `Không thể ngủ ít hơn ${minSleepHours} giờ.`;
-  hasError = true;
-}
-
-// ⚠️ Cảnh báo nếu ngủ dưới 4 giờ (nhưng không chặn)
-if (sleepHours >= minSleepHours && sleepHours < warningSleepHours) {
-  toast.warning(`Ngủ dưới ${warningSleepHours} giờ có thể ảnh hưởng đến sức khỏe. Hãy ngủ đủ giấc nhé!`);
-}
-
-// ❌ Chặn nếu ngủ quá 10 giờ
-if (sleepHours > maxSleepHours) {
-  newErrors.sleep = `Không thể ngủ liên tục hơn ${maxSleepHours} giờ.`;
-  hasError = true;
-}
-
 
     if (hasError) {
       setErrors(newErrors);
       return;
     }
 
- 
+    const minSleepHours = 1;
+    const maxSleepHours = 10;
+    
+    if (parseFloat(durationValue) < minSleepHours) {
+      toast.error(`Không thể ngủ ít hơn ${minSleepHours} giờ.`);
+      return;
+    }
+    
+    if (parseFloat(durationValue) > maxSleepHours) {
+      toast.error(`Không thể ngủ liên tục hơn ${maxSleepHours} giờ.`);
+      return;
+    }
+    
 
 
     const userId = localStorage.getItem("userId");
