@@ -90,6 +90,7 @@ const EditEntryDialog = ({ open, onClose, record, onSave }) => {
             label="Giờ đi ngủ"
             value={sleepTime}
             onChange={setSleepTime}
+            ampm = {false}
             slotProps={{
               textField: {
                 fullWidth: true,
@@ -101,6 +102,7 @@ const EditEntryDialog = ({ open, onClose, record, onSave }) => {
             label="Giờ thức dậy"
             value={wakeTime}
             onChange={setWakeTime}
+            ampm = {false}
             slotProps={{
               textField: {
                 fullWidth: true,
