@@ -90,12 +90,26 @@ useEffect(() => {
       return;
     }
 
-    const maxSleepHours = 10; // Giới hạn hợp lý, có thể thay đổi
-
-if (parseFloat(durationValue) > maxSleepHours) {
-  toast.error(`Không thể ngủ liên tục hơn ${maxSleepHours} giờ.`);
-  return;
-}
+    const minSleepHours = 1;
+    const warningSleepHours = 4;
+    const maxSleepHours = 10;
+    
+    const sleepHours = parseFloat(durationValue);
+    
+    if (sleepHours < minSleepHours) {
+      toast.error(`Không thể ngủ ít hơn ${minSleepHours} giờ.`);
+      return;
+    }
+    
+    if (sleepHours < warningSleepHours) {
+      toast.warning(`Ngủ dưới ${warningSleepHours} giờ có thể ảnh hưởng đến sức khỏe. Hãy ngủ đủ giấc nhé!`);
+    }
+    
+    if (sleepHours > maxSleepHours) {
+      toast.error(`Không thể ngủ liên tục hơn ${maxSleepHours} giờ.`);
+      return;
+    }
+    
 
 
     const userId = localStorage.getItem("userId");
