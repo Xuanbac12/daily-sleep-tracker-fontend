@@ -10,14 +10,20 @@ import SleepAnalysis from "../SleepAnalysis/SleepAnalysis";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import dayjs from "dayjs";
-import isoWeek from "dayjs/plugin/isoWeek"; // Thêm plugin hỗ trợ tuần ISO (Thứ 2 → CN)
-dayjs.extend(isoWeek);
+import isoWeek from "dayjs/plugin/isoWeek";
+import WeekSelector from "./WeekSelector"; // 👉 Đã thêm bộ chọn tuần
 
+dayjs.extend(isoWeek);
 
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [selectedWeek, setSelectedWeek] = useState({
+    start: dayjs().startOf("isoWeek"),
+    end: dayjs().endOf("isoWeek"),
+  });
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime1, setSelectedTime1] = useState("");
@@ -27,34 +33,17 @@ const Home = () => {
   const userId = localStorage.getItem("userId");
   const username = localStorage.getItem("username");
 
-  // 📅 Lọc 7 ngày gần nhất
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-
-  const last7DaysRecords = records
-    .filter((r) => new Date(r.date) >= sevenDaysAgo)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  // 📅 Lọc theo tuần hiện tại (Thứ 2 - Chủ nhật)
-  const getCurrentWeekRecords = (records) => {
-    const today = dayjs();
-  
-    const startOfWeek = today.startOf("isoWeek"); // ✅ Thứ 2 tuần này
-    const endOfWeek = today.endOf("isoWeek");     // ✅ Chủ nhật tuần này
-  
-    return records.filter((r) => {
-      const recordDate = dayjs(r.date);
-      return recordDate.isAfter(startOfWeek.subtract(1, 'day')) && recordDate.isBefore(endOfWeek.add(1, 'day'));
-    });
-  };
-  
-
-  const thisWeekRecords = getCurrentWeekRecords(records);
-
   const fetchSleepRecords = async () => {
+    if (!userId) return;
     try {
-      const res = await axios.get(`/sleep/user/${userId}`);
-      console.log("📥 Sleep data:", res.data);
+      setLoading(true);
+      const res = await axios.get("/sleep/week", {
+        params: {
+          userId,
+          start: selectedWeek.start.format("YYYY-MM-DD"),
+          end: selectedWeek.end.format("YYYY-MM-DD"),
+        },
+      });
       setRecords(res.data);
     } catch (err) {
       console.error("❌ Lỗi khi fetch dữ liệu ngủ:", err);
@@ -63,6 +52,7 @@ const Home = () => {
     }
   };
 
+  // 🔁 Khi đăng nhập hoặc đổi tuần thì gọi API
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -70,19 +60,19 @@ const Home = () => {
     } else {
       fetchSleepRecords();
     }
-  }, []);
+  }, [selectedWeek]);
 
   const handleClickOpen = () => setOpen(true);
 
   const handleClose = () => {
     setOpen(false);
-    fetchSleepRecords(); // Làm mới dữ liệu
+    fetchSleepRecords(); // Làm mới dữ liệu sau khi thêm
     setSelectedDate("");
     setSelectedTime1("");
     setSelectedTime2("");
   };
 
-  const chartData = last7DaysRecords.map((item) => ({
+  const chartData = records.map((item) => ({
     date: item.date,
     duration: parseFloat(item.duration),
   }));
@@ -93,19 +83,25 @@ const Home = () => {
     <div className="main">
       <Navbar username={username} />
       <div className="container">
-        <p className="title">Daily Sleep Tracker</p>
+      <div className="header-section">
+  <p className="title">Daily Sleep Tracker</p>
 
-        <div className="add-btn">
-          <Button
-            variant="contained"
-            className="new-btn1"
-            startIcon={<AddIcon />}
-            onClick={handleClickOpen}
-            sx={{ backgroundColor: "#5795FA", borderRadius: 50 }}
-          >
-            New Entry
-          </Button>
-        </div>
+  <div className="filters">
+    <WeekSelector onWeekChange={setSelectedWeek} />
+  </div>
+
+  <div className="add-btn">
+    <Button
+      variant="contained"
+      className="new-btn1"
+      startIcon={<AddIcon />}
+      onClick={handleClickOpen}
+    >
+      New Entry
+    </Button>
+  </div>
+</div>
+
 
         <NewEntryDialog
           open={open}
@@ -126,22 +122,17 @@ const Home = () => {
         ) : (
           <>
             <div className="statistics">
-            <div className="stats">
-            <SleepTable records={thisWeekRecords} setRecords={setRecords} />
-
+              <div className="stats">
+                <SleepTable records={records} setRecords={setRecords} />
               </div>
 
               <div className="duration">
                 <p className="sleep-title">Sleep Duration</p>
-                <SleepChart data={thisWeekRecords} />
+                <SleepChart data={records} />
               </div>
-
             </div>
 
-            <SleepAnalysis records={thisWeekRecords} />
-
-            {/* Biểu đồ thêm (tuần hiện tại) */}
-           
+            <SleepAnalysis records={records} />
           </>
         )}
       </div>

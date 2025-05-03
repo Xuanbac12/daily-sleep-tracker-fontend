@@ -17,15 +17,15 @@ const SleepTable = ({ records, setRecords }) => {
   const [deleteId, setDeleteId] = useState(null);         // ✅ Id đang chờ xác nhận
 
 
-  const startOfWeek = dayjs().startOf("isoWeek");
-  const endOfWeek = dayjs().endOf("isoWeek");
+  // const startOfWeek = dayjs().startOf("isoWeek");
+  // const endOfWeek = dayjs().endOf("isoWeek");
 
-  const filteredRecords = records.filter((r) => {
-    const date = dayjs(r.date);
-    return date.isAfter(startOfWeek.subtract(1, "day")) && date.isBefore(endOfWeek.add(1, "day"));
-  });
+  // const filteredRecords = records.filter((r) => {
+  //   const date = dayjs(r.date);
+  //   return date.isAfter(startOfWeek.subtract(1, "day")) && date.isBefore(endOfWeek.add(1, "day"));
+  // });
 
-  const totalSleep = filteredRecords.reduce((sum, r) => sum + parseFloat(r.duration), 0);
+  //const totalSleep = filteredRecords.reduce((sum, r) => sum + parseFloat(r.duration), 0);
 
   const handleEdit = (id) => {
     const record = records.find((r) => r.id === id);
@@ -89,7 +89,10 @@ const SleepTable = ({ records, setRecords }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredRecords.map((record) => (
+        {[...records]
+  .sort((a, b) => new Date(a.date) - new Date(b.date))
+  .map((record) => (
+
             <tr key={record.id}>
               <td>{record.date}</td>
               <td>{record.sleepTime}</td>

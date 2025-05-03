@@ -19,7 +19,7 @@ body {
   padding: 1rem;
   padding-top: 100px; /* ✅ thay vì margin-top */
   min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
+  
 }
 
 .container {
@@ -106,4 +106,48 @@ body {
   border-radius: 12px;
 }
 
+}
+/* 🔷 Bọc phần chọn tháng + tuần + nút mới */
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* 🔷 Tuỳ chỉnh DatePicker và Select */
+.filters .MuiFormControl-root {
+  min-width: 150px;
+  font-size: 0.95rem;
+}
+
+.filters select {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* 🔷 Làm nổi nút New Entry */
+.new-btn1 {
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: linear-gradient(to right, #4a90e2, #5795fa);
+  color: #ffffff;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.new-btn1:hover {
+  background: linear-gradient(to right, #3c7dcf, #4a90e2);
 }

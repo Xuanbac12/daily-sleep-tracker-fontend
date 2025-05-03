@@ -1,37 +1,21 @@
 import React from "react";
-import dayjs from "dayjs";
 import "./SleepAnalysis.css";
-import isoWeek from "dayjs/plugin/isoWeek";
-dayjs.extend(isoWeek);
-
-
 
 const SleepAnalysis = ({ records }) => {
-  if (!records || records.length === 0) return <p>No data</p>;
+  if (!records || records.length === 0) return <p>Không có dữ liệu trong tuần này.</p>;
 
-  // 👉 Lọc bản ghi thuộc cùng tuần hiện tại
-  const today = dayjs();
-  const currentWeek = today.isoWeek();
-  const currentYear = today.year();
-
-  const weekRecords = records.filter(r => {
-    const date = dayjs(r.date);
-    return date.isoWeek() === currentWeek && date.year() === currentYear;
-  });
-
-  if (weekRecords.length === 0) return <p>Không có dữ liệu trong tuần này.</p>;
-
-  const durations = weekRecords.map(r => Number(r.duration));
+  const durations = records.map(r => Number(r.duration));
   const avgDuration = (durations.reduce((a, b) => a + b, 0) / durations.length).toFixed(2);
   const below6h = durations.filter(d => d < 6).length;
   const above8h = durations.filter(d => d > 8).length;
 
-  const avgTime = (timeList, isWakeTime = false) => {
+  // ✅ Hàm tính trung bình thời gian (có thể dùng cho cả sleepTime và wakeTime)
+  const avgTime = (timeList, isSleep = false) => {
     const totalMinutes = timeList.reduce((acc, t) => {
       let [h, m] = t.split(":").map(Number);
 
-      // ✅ Nếu là wakeTime và trước 5 giờ sáng → cộng thêm 24h để tính toán chính xác
-      if (isWakeTime && h < 5) {
+      // ✅ Nếu là sleepTime và giờ < 12h (ban đêm) thì cộng 24h để không bị tính sai
+      if (isSleep && h < 12) {
         h += 24;
       }
 
@@ -45,9 +29,8 @@ const SleepAnalysis = ({ records }) => {
     return `${avgH.toString().padStart(2, "0")}:${avgM.toString().padStart(2, "0")}`;
   };
 
-  const avgSleepTime = avgTime(records.map(r => r.sleepTime));
-  const avgWakeTime = avgTime(records.map(r => r.wakeTime), true); // ✅ xử lý thời gian qua đêm
-
+  const avgSleepTime = avgTime(records.map(r => r.sleepTime), true);  // ✅ xử lý giờ đi ngủ ban đêm
+  const avgWakeTime = avgTime(records.map(r => r.wakeTime), false);   // ❌ không cộng 24h cho giờ thức
 
   return (
     <div className="analysis-box">
