@@ -38,6 +38,16 @@ const NewEntryDialog = ({ open, handleClose, existingDates = [] }) => {
     }
   }, [selectedDate, sleepTime, wakeTime]);
 
+  // Kiểm tra xem ngày đã tồn tại hay chưa
+useEffect(() => {
+  if (selectedDate) {
+    const formattedDate = selectedDate.format("YYYY-MM-DD");
+    if (!existingDates.includes(formattedDate)) {
+      setErrors(prev => ({ ...prev, date: "" }));
+    }
+  }
+}, [selectedDate, existingDates]);
+
   const handleReset = () => {
     setSelectedDate(null);
     setSleepTime(null);
