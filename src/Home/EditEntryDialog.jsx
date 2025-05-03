@@ -82,7 +82,7 @@ const EditEntryDialog = ({ open, onClose, record, onSave }) => {
           <TextField
             label="Ngày (không thay đổi)"
             fullWidth
-            value={record?.date || ""}
+            value={record?.date ? dayjs(record.date).format("DD/MM/YYYY") : ""}
             margin="dense"
             disabled
           />
